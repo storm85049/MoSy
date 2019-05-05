@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Sydney</string>
+    <string name="thumbnail">thumbnail</string>
+    <string name="api_key">3983bac1dd143f559b46ccf13294483f</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

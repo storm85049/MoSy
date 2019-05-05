@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <ImageView
+    android:id="@+id/weather_list_icon"
+    android:layout_width="90dp"
+    android:layout_height="90dp"
+    android:layout_alignParentStart="true"
+    android:layout_centerVertical="true"
+    android:layout_marginBottom="6dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginTop="6dp"
+    android:contentDescription="@string/thumbnail"
+    android:scaleType="centerInside"
+    tools:src="@mipmap/ic_launcher" />
+
+  <TextView
+    android:id="@+id/recipe_list_detail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_centerVertical="true"
+    android:layout_marginEnd="2dp"
+    android:layout_marginStart="4dp"
+    android:maxLines="1"
+    android:paddingEnd="4dp"
+    android:textColor="#000000"
+    android:textSize="12sp"
+    tools:text="Detail" />
+
+  <RelativeLayout
+    android:id="@+id/recipe_list_text_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_toEndOf="@id/weather_list_icon"
+    android:layout_toStartOf="@id/recipe_list_detail">
+
+    <TextView
+      android:id="@+id/weather_list_city"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:textSize="18sp"
+      tools:text="City" />
+
+    <TextView
+      android:id="@+id/weather_list_description"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/weather_list_city"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginTop="2dp"
+      android:ellipsize="end"
+      android:maxLines="3"
+      android:textSize="16sp"
+      tools:text="Description" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/weather_list_description">
+
+
+      <ImageView
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:layout_alignParentStart="true"
+          android:layout_centerVertical="true"
+          android:layout_marginStart="4dp"
+          android:layout_marginTop="6dp"
+          android:contentDescription="@string/thumbnail"
+          android:scaleType="centerInside"
+          android:src="@drawable/ic_thermometer" />
+      <TextView
+          android:id="@+id/weather_list_temperature"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="5dp"
+          android:layout_marginRight="8dp"
+          android:layout_marginTop="2dp"
+          android:paddingTop="3dp"
+          android:ellipsize="end"
+          android:maxLines="3"
+          android:textSize="16sp"
+          tools:text="Temp" />
+      <ImageView
+          android:layout_width="20dp"
+          android:layout_height="20dp"
+          android:layout_alignParentStart="true"
+          android:layout_centerVertical="true"
+          android:layout_marginStart="4dp"
+          android:layout_marginTop="6dp"
+          android:contentDescription="@string/thumbnail"
+          android:scaleType="centerInside"
+          android:src="@drawable/ic_humidity" />
+      <TextView
+          android:id="@+id/weather_list_humidity"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="5dp"
+          android:layout_marginLeft="2dp"
+          android:layout_marginTop="2dp"
+          android:layout_marginRight="8dp"
+          android:layout_toRightOf="@+id/weather_list_temperature"
+          android:ellipsize="end"
+          android:maxLines="3"
+          android:textSize="16sp"
+          tools:text="Humidity" />
+
+
+    </LinearLayout>
+
+
+  </RelativeLayout>
+</RelativeLayout>
