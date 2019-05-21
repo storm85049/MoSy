@@ -45,15 +45,16 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class WeaterFragment : android.support.v4.app.Fragment(), CustomObserver {
+class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
 
     /***updateList*/
-    override fun apply() {
+    override fun applyChanges() {
         initList(view!!)
     }
 
     private lateinit var listView : ListView
     private lateinit var swipeLayout : SwipeRefreshLayout
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -132,5 +133,6 @@ class WeaterFragment : android.support.v4.app.Fragment(), CustomObserver {
         val intent = WeatherDetailActivity.newIntent(context,weather)
         startActivity(intent)
     }
+
 }
 

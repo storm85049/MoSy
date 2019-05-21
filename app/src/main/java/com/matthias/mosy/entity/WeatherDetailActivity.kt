@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.webkit.WebView
 import android.widget.Button
@@ -13,9 +14,12 @@ import android.widget.TextView
 import android.widget.Toast
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
+import com.matthias.mosy.MainActivity
 import com.matthias.mosy.R
+import com.matthias.mosy.adapter.CustomObserver
 import com.matthias.mosy.adapter.ScrollAdapter
 import com.matthias.mosy.httpclient.WeatherDataClient
+import kotlinx.android.synthetic.main.activity_weather_detail.*
 import kotlinx.android.synthetic.main.fragment_weather.*
 import okhttp3.*
 import java.io.IOException
@@ -36,9 +40,11 @@ class WeatherDetailActivity : AppCompatActivity() {
 
 
 
+
   companion object {
     const val EXTRA_CITY = "city"
     const val EXTRA_ID = "id"
+
 
     fun newIntent(context: Context, weather: Weather): Intent {
       val intent = Intent(context, WeatherDetailActivity::class.java)
@@ -64,6 +70,17 @@ class WeatherDetailActivity : AppCompatActivity() {
     loadViewVars()
     loadView()
 
+
+    deleteCityBtn.setOnClickListener{myView ->
+        val dialog = AlertDialog.Builder(this).setTitle("${cityName.text} löschen ? ").setMessage("Soll ${cityName.text} aus den gespeiocherten Städten gelöscht werden?")
+                .setPositiveButton("Bestätigen", { dialog, i ->
+                  MainActivity.prefs?.deleteCityById(intent.extras.getInt(EXTRA_ID))
+
+                  finish()
+                })
+                .setNegativeButton("Zurück", { dialog, i -> })
+        dialog.show()
+      }
   }
 
   fun loadView(){
@@ -107,7 +124,12 @@ class WeatherDetailActivity : AppCompatActivity() {
 
     var iconPath = "ic_${weather?.iconID}"
     var idPath = resources.getIdentifier(iconPath,"drawable", packageName)
+
     weatherIcon.setImageResource(idPath)
+    weatherIcon.adjustViewBounds = true
+
+
+
 
 
 

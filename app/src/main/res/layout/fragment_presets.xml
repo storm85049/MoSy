@@ -6,24 +6,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.PresetsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
-    <TextView
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+
+        <GridLayout
+            android:id="@+id/gridLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="267dp"
+            android:columnCount="3"
+            android:orientation="horizontal"
+            android:rowCount="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageButton
+                android:id="@+id/icon0"
+                android:src="@drawable/ic_01d"
+                android:backgroundTint="#"
+                />
+
+            <ImageButton
+                android:id="@+id/icon1"
+                android:src="@drawable/ic_02d" />
+
+            <ImageButton
+                android:id="@+id/icon2"
+                android:src="@drawable/ic_03d" />
+
+            <ImageButton
+                android:id="@+id/icon3"
+                android:src="@drawable/ic_04d" />
+
+            <ImageButton
+                android:id="@+id/icon4"
+                android:src="@drawable/ic_09d" />
+
+            <ImageButton
+                android:id="@+id/icon5"
+                android:src="@drawable/ic_10d" />
+
+            <ImageButton
+                android:id="@+id/icon6"
+                android:src="@drawable/ic_11d" />
+
+            <ImageButton
+                android:id="@+id/icon7"
+                android:src="@drawable/ic_13d" />
+
+            <ImageButton
+                android:id="@+id/icon8"
+                android:src="@drawable/ic_50d" />
+
+        </GridLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
 
 </FrameLayout>

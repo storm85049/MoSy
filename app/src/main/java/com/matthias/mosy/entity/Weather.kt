@@ -45,7 +45,6 @@ class Weather(
         val temperature: Double,
         val iconID: String) {
 
-
     var sunriseUnix:Int? = null
     var sunsetUnix:Int? = null
     var pressure:Int? = null
@@ -96,8 +95,17 @@ class Weather(
               weather.sunriseUnix = weatherSysObject?.get("sunrise") as Int?
               weather.sunsetUnix =  weatherSysObject?.get("sunset") as Int?
               weather.windDegree = windObject?.get("deg") as Int?
-              weather.windspeed= windObject?.get("speed") as Double?
+              //todo manchmal kommt das hier auch als "falscher Datentyp an, das muss unbedingt behoben werden"
+
               weather.pressure = weatherData?.get("pressure") as Int?
+
+              try{
+                  var doubledValue = windObject?.get("speed") as Double?
+                  weather.windspeed= doubledValue
+              }catch(e:ClassCastException){
+                  var intValue =  windObject?.get("speed") as Int?
+                  weather.windspeed = intValue?.toDouble()
+              }
 
 
               //gibt es dafür eine andere Lösung ? wenn der wert als zb 22 wiederkommmt, wird er als Int interpretiert, ansonsten hat es initial Double as Datentypen...

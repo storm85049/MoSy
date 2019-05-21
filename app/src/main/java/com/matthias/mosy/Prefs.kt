@@ -42,4 +42,12 @@ class Prefs(context: Context){
             setSavedCities(saved_cities)
         }
     }
+
+    fun deleteCityById(id: Int){
+        if(saved_cities.contains(id)){
+            saved_cities.remove(id)
+            setSavedCities(saved_cities)
+        }
+
+    }
 }

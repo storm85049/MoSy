@@ -13,7 +13,7 @@ class ScrollAdapter(
 
         if(listView?.getChildAt(0) != null){
             println("THIS SHIT WORKS WOOOOOOHOOOOO ")
-            var flag = (listView?.firstVisiblePosition == 0 && listView?.getChildAt(0).top == 0)
+            var flag = (listView.firstVisiblePosition == 0 && listView.getChildAt(0)?.top == 0)
             swipeRefreshLayout.isEnabled = flag
         }
 
@@ -21,7 +21,9 @@ class ScrollAdapter(
     }
 
     override fun onScrollStateChanged(p0: AbsListView?, p1: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        println("scroll state has changed");
+
     }
 
 
