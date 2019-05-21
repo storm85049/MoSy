@@ -18,60 +18,63 @@ import com.matthias.mosy.R
 import kotlinx.android.synthetic.main.fragment_presets.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-private var colorNotPressed = Color.argb(255,150,150,150)
-private var colorPressed = Color.argb(50,50,50,50)
-
-/**
- * A simple [Fragment] subclass.
- *
- */
 class PresetsFragment : Fragment() {
 
     private lateinit var gridLayout: GridLayout
+    private var lastClickedPreset: Int? = null
+    private val LABEL_WEATHER = hashMapOf(
+            0 to "Klarer Himmel",
+            1 to "Ein paar Wolken",
+            2 to "Wolkig",
+            3 to "Überwiegend bewölkt",
+            4 to "Leichtes Nieseln",
+            5 to "Mäßiger Regen",
+            6 to "Gewitter",
+            7 to "Schneefall",
+            8 to "Nebel"
 
+    )
+    companion object {
+        const val NAME = "Presets"
+
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_presets, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-
-
         gridLayout = view!!.findViewById<GridLayout>(R.id.gridLayout)
-
         initGridItems()
-    }
-
-
-    fun initGridItems(){
-        val count = gridLayout.childCount
-            for(i in 0..(count-1)){
-                var imageButton: ImageButton = gridLayout.getChildAt(i) as ImageButton
-                imageButton.setOnClickListener { myView ->
-                    setBgAndResetOthers(myView)
-                    imageButton.backgroundTintList = ColorStateList.valueOf(Color.RED)
-                    imageButton.setColorFilter(colorPressed)
-                }
-            }
-
-    }
-
-    fun setBgAndResetOthers(view: View){
-        val count = gridLayout.childCount
-        for(i in 0..(count-1)){
-            var imageButton: ImageButton = gridLayout.getChildAt(i) as ImageButton
-            imageButton.setColorFilter(colorNotPressed)
-
+        activate_presets_btn.setOnClickListener { myView ->
+            //todo activate weather via bluetooth
         }
     }
 
-    companion object {
-        const val NAME = "Presets"
+    fun initGridItems(){
+        val count = gridLayout.childCount
+        for(i in 0..(count-1)){
+            var imageButton: ImageButton = gridLayout.getChildAt(i) as ImageButton
+            imageButton.setOnClickListener { myView ->
+                setBgAndResetOthers()
+                imageButton.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorBtnPressed))
+                activate_presets_btn.isEnabled = true
+                lastClickedPreset = i
+                if(lastClickedPreset != null){
+                    presetsDescription.visibility = View.VISIBLE
+                    var message = LABEL_WEATHER[lastClickedPreset!!]
+                    presetsDescription.text = message
+                }
+            }
+        }
+    }
+
+
+    fun setBgAndResetOthers(){
+        if(lastClickedPreset != null){
+            var imageButton: ImageButton = gridLayout.getChildAt(lastClickedPreset!!) as ImageButton
+            imageButton.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorBtnNotPressed))
+        }
     }
 }

@@ -13,6 +13,7 @@ import android.widget.AbsListView.*
 import android.widget.ListView
 import android.widget.Toast
 import com.beust.klaxon.JsonObject
+import com.beust.klaxon.KlaxonException
 import com.beust.klaxon.Parser
 import com.matthias.mosy.MainActivity
 import com.matthias.mosy.R
@@ -103,14 +104,21 @@ class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
             override fun onResponse(call: Call, response: Response) {
                 var handler = Handler(Looper.getMainLooper())
                 handler.post{
-                    var responseString= response.body()?.string()
                     val parser = Parser()
-                    val stringBuilder = StringBuilder(responseString)
-                    val jsonObject : JsonObject = parser.parse(stringBuilder) as JsonObject
-                    if(response.code() != 200){
+                    val stringBuilder = StringBuilder(response.body()?.string())
+                    var jsonObject: JsonObject = JsonObject()
+                    var jsonParseable = false
+                    try{
+                        jsonObject = parser.parse(stringBuilder) as JsonObject
+                        jsonParseable = true
+
+                    }catch (e: KlaxonException){
+                        Toast.makeText(context, "Es besteht ein Problem mit der Wetterdatenschnittstelle", Toast.LENGTH_LONG).show()
+                    }
+                    if(response.code() != 200 && jsonParseable){
                         var message = jsonObject.get("message") as String
                         Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
-                    }else{
+                    }else if (jsonParseable){
                         val convertedList = Weather.createWeatherListItem(jsonObject)
                         if(convertedList != null) {
                             val adapter = WeatherAdapter(context, convertedList)

@@ -9,4 +9,7 @@
   <color name="colorLowSodium">#F4D03F</color>
   <color name="colorLowFat">#F2784B</color>
   <color name="colorVegetarian">#26A65B</color>
+  <color name="colorBtnPressed">#528192</color>
+  <color name="colorBtnNotPressed">#72879294</color>
+
 </resources>
