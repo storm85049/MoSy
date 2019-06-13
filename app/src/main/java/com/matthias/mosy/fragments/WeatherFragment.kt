@@ -33,6 +33,7 @@ import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
+import java.lang.Exception
 import java.lang.StringBuilder
 import java.net.UnknownHostException
 import java.util.*
@@ -50,7 +51,7 @@ class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
 
     /***updateList*/
     override fun applyChanges() {
-        initList(view!!)
+        initList()
     }
 
     private lateinit var listView : ListView
@@ -72,7 +73,7 @@ class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         listView = view!!.findViewById<ListView>(R.id.weather_list)
-        this.initList(view!!)
+        this.initList()
 
         fab.setOnClickListener { myView ->
             var searchWeatherDialog = SearchWeatherDialog(context, this)
@@ -83,14 +84,14 @@ class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
         swipeLayout.setOnRefreshListener {
             var mHandler = Handler()
             var mRunnable = Runnable{
-                initList(view)
+                initList()
             }
             mHandler.post(mRunnable)
         }
 
     }
 
-    fun initList(view: View)
+    fun initList()
     {
         var savedCities = MainActivity.prefs?.getSavedCities()
         var call : Call?  = WeatherDataClient.getData(context,listOfIds = savedCities!!)
@@ -111,7 +112,6 @@ class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
                     try{
                         jsonObject = parser.parse(stringBuilder) as JsonObject
                         jsonParseable = true
-
                     }catch (e: KlaxonException){
                         Toast.makeText(context, "Es besteht ein Problem mit der Wetterdatenschnittstelle", Toast.LENGTH_LONG).show()
                     }
@@ -119,7 +119,12 @@ class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
                         var message = jsonObject.get("message") as String
                         Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
                     }else if (jsonParseable){
-                        val convertedList = Weather.createWeatherListItem(jsonObject)
+                        var convertedList:ArrayList<Weather>? = null
+                        try{
+                           convertedList = Weather.createWeatherListItem(jsonObject)
+                        }catch(e:Exception){
+                            Toast.makeText(context, "Es ist ein Fehler beim Abrufen der Daten aufgetreten", Toast.LENGTH_LONG).show()
+                        }
                         if(convertedList != null) {
                             val adapter = WeatherAdapter(context, convertedList)
                             listView.adapter = adapter
@@ -141,6 +146,5 @@ class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
         val intent = WeatherDetailActivity.newIntent(context,weather)
         startActivity(intent)
     }
-
 }
 

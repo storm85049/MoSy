@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="300dp"
-    android:maxHeight="300dp">
+    android:maxHeight="300dp"
+    app:layout_constraintHeight_max="300dp">
 
     <EditText
         android:id="@+id/city_user_string"
@@ -16,17 +17,10 @@
         android:layout_marginBottom="4dp"
         android:hint="Stadt/ Ort" />
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/city_user_string"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".fragments.WeaterFragment">
-
         <!-- TODO: Update blank fragment layout -->
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
+            android:layout_below="@+id/city_user_string"
             android:layout_height="match_parent">
 
             <ProgressBar
@@ -53,10 +47,5 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
-
-    </FrameLayout>
-
-
-
 
 </RelativeLayout>

@@ -12,15 +12,15 @@ class CustomPageAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter
     override fun getItem(position: Int): Fragment {
         when(position){
             0-> {return WeaterFragment()}
-            else -> {return PresetsFragment() }
+            else-> {return PresetsFragment()}
         }
     }
 
 
     override fun getPageTitle(position: Int): CharSequence {
         when(position){
-            0-> {return WeaterFragment.NAME}
-            else -> {return PresetsFragment.NAME}
+            0-> {return WeaterFragment.NAME}else-> {return PresetsFragment.NAME}
+
         }
     }
 

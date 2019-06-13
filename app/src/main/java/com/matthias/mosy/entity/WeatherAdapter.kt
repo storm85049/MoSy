@@ -106,8 +106,8 @@ class WeatherAdapter(private val context: Context,
 
     cityTextView.text = weather.city
     descriptionTextView.text = weather.description
-    temperatureTextView.text = weather.temperature.toString()
-    humidityTextView.text = weather.humidity.toString()
+    temperatureTextView.text = weather.temperature.toString() + "°"
+    humidityTextView.text = weather.humidity.toString() + "%"
     var iconPath = "ic_${weather.iconID}"
     var idPath = context.resources.getIdentifier(iconPath,"drawable", context.packageName)
     weatherIcon.setImageResource(idPath)

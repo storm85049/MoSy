@@ -2,19 +2,35 @@ package com.matthias.mosy
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.matthias.mosy.adapter.CustomListener
 
 class Prefs(context: Context){
-
-    //cities saved with their ids like this 1092|10239480|012987
-
 
 
     val PREFERENCES = "com.matthias.mosy.prefs"
     val SAVED_CITIES = "saved_cities"
     val prefs : SharedPreferences = context.getSharedPreferences(PREFERENCES,0)
+    var BT_ENABLED: Boolean = false
 
+    private var listeners = arrayListOf<CustomListener>()
+
+    fun setBluetoothEnabled(value: Boolean){
+        BT_ENABLED = value
+        notifyBtState(BT_ENABLED)
+    }
     lateinit var saved_cities: ArrayList<Int>
 
+
+    fun notifyBtState(value: Boolean){
+        for(listener: CustomListener in listeners){
+            listener.notifyBlueState(value)
+        }
+    }
+
+    fun addListener(listener:CustomListener){
+        listeners.add(listener)
+        notifyBtState(BT_ENABLED)
+    }
     fun getSavedCities():ArrayList<Int>
     {
         var raw  = prefs.getString(SAVED_CITIES,"")

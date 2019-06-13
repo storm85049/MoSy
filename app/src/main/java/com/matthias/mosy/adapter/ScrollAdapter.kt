@@ -8,23 +8,15 @@ class ScrollAdapter(
         private var swipeRefreshLayout: SwipeRefreshLayout,
         private var listView:ListView) : AbsListView.OnScrollListener{
 
-
     override fun onScroll(p0: AbsListView?, p1: Int, p2: Int, p3: Int) {
 
         if(listView?.getChildAt(0) != null){
-            println("THIS SHIT WORKS WOOOOOOHOOOOO ")
             var flag = (listView.firstVisiblePosition == 0 && listView.getChildAt(0)?.top == 0)
             swipeRefreshLayout.isEnabled = flag
         }
-
-
     }
 
     override fun onScrollStateChanged(p0: AbsListView?, p1: Int) {
-
-        println("scroll state has changed");
-
+        println("scroll state has changed")
     }
-
-
 }

@@ -57,8 +57,8 @@ class Weather(
 
     companion object {
 
-      fun createWeatherListItem(jsonObject: JsonObject, moreInfo: Boolean = false):ArrayList<Weather>? {
-
+        @Throws(Exception::class)
+      fun createWeatherListItem(jsonObject: JsonObject, moreInfo: Boolean = false):ArrayList<Weather>?  {
           var list = ArrayList<Weather>()
 
           var multiple = jsonObject.get("cnt")
@@ -86,7 +86,13 @@ class Weather(
           val windObject = jsonObject.get("wind") as JsonObject
 
           val weatherData = jsonObject.get("main") as JsonObject
-          val temperature: Double = weatherData .get("temp") as Double
+          var temperature:Double
+          try{
+              temperature = weatherData.get("temp") as Double
+          }catch (e: ClassCastException){
+              var temperatureInt: Int= weatherData.get("temp") as Int
+              temperature = temperatureInt.toDouble()
+          }
           val humidity : Int= weatherData.get("humidity") as Int
           val iconId:  String = weatherDetailsObject.get("icon") as String
           if(moreInfo){
@@ -94,7 +100,15 @@ class Weather(
 
               weather.sunriseUnix = weatherSysObject?.get("sunrise") as Int?
               weather.sunsetUnix =  weatherSysObject?.get("sunset") as Int?
-              weather.windDegree = windObject?.get("deg") as Int?
+
+              try{
+                  var doubledValue = windObject?.get("deg") as Int?
+                  weather.windDegree= doubledValue
+              }catch(e:ClassCastException){
+                  var doubleValue=  windObject?.get("speed") as Double?
+                  weather.windDegree= doubleValue?.toInt()
+              }
+
               //todo manchmal kommt das hier auch als "falscher Datentyp an, das muss unbedingt behoben werden"
 
               weather.pressure = weatherData?.get("pressure") as Int?

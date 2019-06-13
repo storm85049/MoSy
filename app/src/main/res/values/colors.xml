@@ -11,5 +11,7 @@
   <color name="colorVegetarian">#26A65B</color>
   <color name="colorBtnPressed">#528192</color>
   <color name="colorBtnNotPressed">#72879294</color>
+  <color name="btNotConnected">#72D10000</color>
+  <color name="btConnected">#72009E00</color>
 
 </resources>
