@@ -30,12 +30,11 @@ import okhttp3.Callback
 import okhttp3.Response
 import java.io.IOException
 import java.lang.StringBuilder
+import java.net.UnknownHostException
 import java.util.*
 
 
 class WeatherDetailActivity : AppCompatActivity(),CustomListener{
-
-
 
    override fun notifyBlueState(value: Boolean) {
      runOnUiThread {
@@ -54,15 +53,12 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
   private lateinit var activateButton: Button
   private lateinit var weatherIcon: ImageView
   private lateinit var btStateBtn: ImageButton
-  private var observer: CustomObserver? = null
 
   private var stateNumber : Int? = null
   private var prefs : Prefs? = null
   private var mediaPlayer: MediaPlayer? = null;
 
   private lateinit var bluetoothService: BluetoothLeService
-
-
 
 
   companion object {
@@ -87,12 +83,6 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
     activateButton = findViewById(R.id.activate_btn)
     weatherIcon = findViewById(R.id.weather_icon )
     btStateBtn = findViewById(R.id.bluetoothStateBtn)
-
-   /* var colorId = if (prefs!!.BT_ENABLED) resources.getColor(R.color.btConnected) else resources.getColor(R.color.btNotConnected)
-    btStateBtn.backgroundTintList  = ColorStateList.valueOf(colorId)
-    if(prefs!!.BT_ENABLED){
-      activateButton.isEnabled = true
-    }*/
   }
 
 
@@ -100,13 +90,14 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_weather_detail)
     loadViewVars()
+    loadView()
+    bluetoothService = MainActivity.bluetoothLeService
     prefs = MainActivity.prefs
     prefs!!.addListener(this)
+
     mediaPlayer = MediaPlayer.create(this, R.raw.lil_pump_iced_out)
 
-    loadView()
 
-    bluetoothService = MainActivity.bluetoothLeService
 
     btStateBtn.setOnClickListener{ myView ->
       if(prefs!!.BT_ENABLED){
@@ -135,13 +126,8 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
       }
   }
 
-  fun addObserver(myObserver:CustomObserver){
-    observer = myObserver
-  }
-
   fun loadView(){
 
-    val city = intent.extras.getString(EXTRA_CITY)
     val cityId= intent.extras.getInt(EXTRA_ID)
     var list = ArrayList<Int>()
     list.add(cityId)
@@ -150,7 +136,12 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
 
     call?.enqueue(object: Callback{
       override fun onFailure(call: okhttp3.Call, e: IOException) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (e is UnknownHostException){
+          var handler = Handler(Looper.getMainLooper())
+          handler.post{
+            Toast.makeText(this@WeatherDetailActivity.applicationContext, "Hat das Handy eine aktive Internetverbindung?", Toast.LENGTH_LONG).show()
+          }
+        }
       }
 
       override fun onResponse(call: okhttp3.Call, response: Response) {

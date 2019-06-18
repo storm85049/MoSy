@@ -99,7 +99,11 @@ class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
         call?.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 if (e is UnknownHostException){
-                    //Toast.makeText(parentFragment.context, "Ist das WLAN auf dem Handy aktiviert?", Toast.LENGTH_LONG).show()
+                    var handler = Handler(Looper.getMainLooper())
+                    handler.post{
+                        Toast.makeText(context, "Hat das Handy eine aktive Internetverbindung?", Toast.LENGTH_LONG).show()
+                        swipeLayout.isRefreshing = false
+                    }
                 }
             }
             override fun onResponse(call: Call, response: Response) {

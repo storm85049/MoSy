@@ -56,7 +56,6 @@ class Weather(
 
 
     companion object {
-
         @Throws(Exception::class)
       fun createWeatherListItem(jsonObject: JsonObject, moreInfo: Boolean = false):ArrayList<Weather>?  {
           var list = ArrayList<Weather>()
@@ -111,8 +110,14 @@ class Weather(
 
               //todo manchmal kommt das hier auch als "falscher Datentyp an, das muss unbedingt behoben werden"
 
-              weather.pressure = weatherData?.get("pressure") as Int?
 
+              try{
+                  var doubledValue = weatherData?.get("pressure") as Int?
+                  weather.pressure= doubledValue
+              }catch(e:ClassCastException){
+                  var doubleValue=  weatherData?.get("pressure") as Double?
+                  weather.pressure = doubleValue?.toInt()
+              }
               try{
                   var doubledValue = windObject?.get("speed") as Double?
                   weather.windspeed= doubledValue

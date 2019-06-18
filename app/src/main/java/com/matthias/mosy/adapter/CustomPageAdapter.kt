@@ -16,7 +16,6 @@ class CustomPageAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter
         }
     }
 
-
     override fun getPageTitle(position: Int): CharSequence {
         when(position){
             0-> {return WeaterFragment.NAME}else-> {return PresetsFragment.NAME}
@@ -24,9 +23,7 @@ class CustomPageAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter
         }
     }
 
-
     override fun getCount(): Int {
         return 2
     }
-
 }

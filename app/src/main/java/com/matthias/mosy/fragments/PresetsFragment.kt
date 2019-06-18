@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_presets.*
 
 class PresetsFragment : Fragment(), CustomListener {
 
-
     private lateinit var gridLayout: GridLayout
     private lateinit var bluetoothService  : BluetoothLeService
     private lateinit var prefs : Prefs
@@ -71,16 +70,14 @@ class PresetsFragment : Fragment(), CustomListener {
     }
 
     fun changeBtButtonsState(value:Boolean){
-        //hijer einseitzen und im looper thread starten
-        println("bluetooth ist nun ${value}")
         var handler = Handler(Looper.getMainLooper())
         handler.post {
             activate_presets_btn?.isEnabled = value
             var colorId = if(value) resources.getColor(R.color.btConnected) else resources.getColor(R.color.btNotConnected)
             bluetoothStateBtn.backgroundTintList = ColorStateList.valueOf(colorId)
         }
-
     }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         gridLayout = view!!.findViewById<GridLayout>(R.id.gridLayout)
         prefs = MainActivity.prefs!!
@@ -88,17 +85,14 @@ class PresetsFragment : Fragment(), CustomListener {
         bluetoothService = MainActivity.bluetoothLeService
         initGridItems()
         activate_presets_btn.setOnClickListener { myView ->
-
             if(lastClickedPreset != null){
-                //todo sichergehen, dass bluetoothservice vorhanden ist.
                 bluetoothService.write(lastClickedPreset.toString())
             }
         }
     }
 
     fun initGridItems(){
-        val count = gridLayout.childCount
-        for(i in 0..(count-1)){
+        for(i in 0 until (gridLayout.childCount)){
             var imageButton: ImageButton = gridLayout.getChildAt(i) as ImageButton
             imageButton.setOnClickListener { myView ->
                 setBgAndResetOthers()
@@ -113,7 +107,6 @@ class PresetsFragment : Fragment(), CustomListener {
             }
         }
     }
-
 
     fun setBgAndResetOthers(){
         if(lastClickedPreset != null){

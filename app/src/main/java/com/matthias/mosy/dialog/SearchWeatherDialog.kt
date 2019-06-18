@@ -68,7 +68,6 @@ class SearchWeatherDialog(context: Context, private var customObserver: CustomOb
         alertDialog = builder.create()
         alertDialog.show()
 
-
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { view ->
             val place = searchText.text
             this.progressIndicator.visibility = View.VISIBLE
@@ -83,9 +82,11 @@ class SearchWeatherDialog(context: Context, private var customObserver: CustomOb
 
         call?.enqueue(object: Callback{
             override fun onFailure(call: Call, e: IOException) {
-
                 if (e is UnknownHostException){
-                    //Toast.makeText(context, "Ist das WLAN auf dem Handy aktiviert?", Toast.LENGTH_LONG).show()
+                    var handler = Handler(Looper.getMainLooper())
+                    handler.post{
+                        Toast.makeText(context, "Hat das Handy eine aktive Internetverbindung?", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
 
@@ -101,19 +102,15 @@ class SearchWeatherDialog(context: Context, private var customObserver: CustomOb
                     if(response.code() != 200){
                         var message = jsonObject.get("message") as String
                         Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
-                    }else{
+                    } else {
                         val convertedList = Weather.createWeatherListItem(jsonObject)
                         if(convertedList != null) {
                             val adapter = WeatherAdapter(context, convertedList)
                             listView.adapter = adapter
-
                             listView.setOnItemClickListener { _, _, position, _ ->
                                 val selectedWeather = convertedList[position]
                                 addToSavedCities(selectedWeather)
-
-
                                 customObserver.applyChanges()
-                                //handler.obtainMessage(MESSAGE_ADD_CITY, -1, -1).sendToTarget()
                                 alertDialog.dismiss()
                             }
                         }
@@ -127,6 +124,5 @@ class SearchWeatherDialog(context: Context, private var customObserver: CustomOb
     {
         MainActivity.prefs?.addCity(weatherEntity.cityId)
     }
-
 
 }
