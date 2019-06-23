@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#3F51B5</color>
+  <color name="colorPrimary">#516AFF</color>
   <color name="colorPrimaryDark">#303F9F</color>
+  <color name="colorPrimaryLight">#C2DCF0</color>
   <color name="colorAccent">#FF4081</color>
   <color name="colorLowCarb">#663399</color>
   <color name="colorBalanced">#4183D7</color>
   <color name="colorMediumCarb">#D2527F</color>
-  <color name="colorLowSodium">#F4D03F</color>
+  <color name="coloryellow">#F4D03F</color>
   <color name="colorLowFat">#F2784B</color>
   <color name="colorVegetarian">#26A65B</color>
-  <color name="colorBtnPressed">#528192</color>
+  <color name="colorBtnPressed">#10ffffff</color>
   <color name="colorBtnNotPressed">#72879294</color>
   <color name="btNotConnected">#72D10000</color>
   <color name="btConnected">#72009E00</color>

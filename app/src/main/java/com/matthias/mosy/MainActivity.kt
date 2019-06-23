@@ -40,6 +40,7 @@ companion object {
     val fragmentAdapter = CustomPageAdapter(supportFragmentManager)
     viewpager_main.adapter = fragmentAdapter
     tabs_main.setupWithViewPager(viewpager_main)
+    tabs_main.setSelectedTabIndicatorColor(resources.getColor(R.color.colorPrimary))
 
   }
 
@@ -52,8 +53,9 @@ companion object {
       startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
     }
     bluetoothLeService = BluetoothLeService(bluetoothManager)
-    bluetoothLeService.initialize()
-    bluetoothLeService.connect(HM10_ADDRESS)
+    if(bluetoothLeService.initialize()){
+      bluetoothLeService.connect(HM10_ADDRESS)
+    }
     //todo : echten callback einbauen
   }
 

@@ -3,6 +3,8 @@ package com.matthias.mosy.entity
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.icu.text.LocaleDisplayNames
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
@@ -14,6 +16,12 @@ import android.webkit.WebView
 import android.widget.*
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.matthias.mosy.MainActivity
 import com.matthias.mosy.Prefs
 import com.matthias.mosy.R
@@ -28,21 +36,32 @@ import kotlinx.android.synthetic.main.activity_weather_detail.*
 import kotlinx.android.synthetic.main.fragment_weather.*
 import okhttp3.Callback
 import okhttp3.Response
+import org.w3c.dom.Text
 import java.io.IOException
 import java.lang.StringBuilder
 import java.net.UnknownHostException
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 
 class WeatherDetailActivity : AppCompatActivity(),CustomListener{
 
-   override fun notifyBlueState(value: Boolean) {
+
+  override fun notifyBlueState(value: Boolean) {
      runOnUiThread {
-       var colorId = if (value) resources.getColor(R.color.btConnected) else resources.getColor(R.color.btNotConnected)
-       btStateBtn.backgroundTintList  = ColorStateList.valueOf(colorId)
+       if(value){
+         btInfo.clearColorFilter()
+       }else{
+         btInfo.setColorFilter(overlay)
+       }
        activateButton.isEnabled = value
      }
   }
+  private var overlay:Int = Color.argb(155,255,255,255)
 
   private lateinit var description: TextView
   private lateinit var cityName: TextView
@@ -50,13 +69,18 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
   private lateinit var pressure: TextView
   private lateinit var humidity: TextView
   private lateinit var temperature: TextView
+  private lateinit var sunrise: TextView
+  private lateinit var sunset: TextView
   private lateinit var activateButton: Button
   private lateinit var weatherIcon: ImageView
-  private lateinit var btStateBtn: ImageButton
+  private lateinit var btInfo: ImageView
+  private lateinit var wind: TextView
+
 
   private var stateNumber : Int? = null
   private var prefs : Prefs? = null
-  private var mediaPlayer: MediaPlayer? = null;
+  private var mediaPlayer: MediaPlayer? = null
+  private var temperatureString:String = "0"
 
   private lateinit var bluetoothService: BluetoothLeService
 
@@ -80,9 +104,13 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
     pressure = findViewById(R.id.pressure_text)
     humidity = findViewById(R.id.humidity_text)
     temperature = findViewById(R.id.temperature_text)
-    activateButton = findViewById(R.id.activate_btn)
+    activateButton = findViewById(R.id.activate_presets_btn)
     weatherIcon = findViewById(R.id.weather_icon )
-    btStateBtn = findViewById(R.id.bluetoothStateBtn)
+    btInfo = findViewById(R.id.btInfo)
+    sunrise = findViewById(R.id.sunrise_text)
+    sunset = findViewById(R.id.sunset_text)
+    wind = findViewById(R.id.wind_text)
+
   }
 
 
@@ -95,11 +123,11 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
     prefs = MainActivity.prefs
     prefs!!.addListener(this)
 
-    mediaPlayer = MediaPlayer.create(this, R.raw.lil_pump_iced_out)
+    mediaPlayer = MediaPlayer()
 
 
 
-    btStateBtn.setOnClickListener{ myView ->
+    btInfo.setOnClickListener{ myView ->
       if(prefs!!.BT_ENABLED){
         Toast.makeText(this,"Bereits mit Sydney verbunden", Toast.LENGTH_SHORT).show()
       }else{
@@ -108,10 +136,19 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
       }
     }
 
-    activate_btn.setOnClickListener { myView ->
+    activate_presets_btn.setOnClickListener { myView ->
       if(stateNumber != null){
-        mediaPlayer?.start()
-        bluetoothService.write(stateNumber.toString())
+        //mediaPlayer?.start()
+        //
+        val source: Int? = PresetsFragment.SONGS.get(stateNumber!!)
+        if(source != null){
+          //todo: das hier noch einmal anpassen
+          var path = "android.resource://com.matthias.mosy/${source}"
+          mediaPlayer?.setDataSource(path)
+          mediaPlayer?.start()
+        }
+
+        bluetoothService.write(stateNumber.toString() + "|" + temperatureString)
       }
     }
 
@@ -125,6 +162,7 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
         dialog.show()
       }
   }
+
 
   fun loadView(){
 
@@ -169,6 +207,17 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
     pressure.text = weather?.pressure?.toString() + " hPa"
     humidity.text = weather?.humidity?.toString() + " %"
     temperature.text = weather?.temperature?.toString() + "°"
+    temperatureString = weather!!.temperature.toInt().toString()
+
+    val sunsetTime = Date(weather.sunsetUnix!!*1000)
+    val sunriseTime = Date(weather.sunriseUnix!!*1000)
+
+    val dateFormat= SimpleDateFormat("HH:mm")
+    sunrise.text = dateFormat.format(sunriseTime)
+    sunset.text = dateFormat.format(sunsetTime)
+
+    wind.text = weather?.windspeed.toString() + " km/h"
+
 
     var iconPath = "ic_${weather?.iconID}"
     var idPath = resources.getIdentifier(iconPath,"drawable", packageName)

@@ -2,6 +2,7 @@ package com.matthias.mosy.fragments
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import com.matthias.mosy.MainActivity
 import com.matthias.mosy.Prefs
@@ -29,6 +31,8 @@ class PresetsFragment : Fragment(), CustomListener {
     private lateinit var gridLayout: GridLayout
     private lateinit var bluetoothService  : BluetoothLeService
     private lateinit var prefs : Prefs
+    private var overlay:Int = Color.argb(155,255,255,255)
+
 
     private var lastClickedPreset: Int? = null
 
@@ -38,8 +42,8 @@ class PresetsFragment : Fragment(), CustomListener {
                 0 to "Klarer Himmel",
                 1 to "Ein paar Wolken",
                 2 to "Wolkig",
-                3 to "Überwiegend bewölkt",
-                4 to "Leichtes Nieseln",
+                3 to "Leichtes Nieseln",
+                4 to "Wetter deaktivieren",
                 5 to "Mäßiger Regen",
                 6 to "Gewitter",
                 7 to "Schneefall",
@@ -50,12 +54,22 @@ class PresetsFragment : Fragment(), CustomListener {
                 "Klarer Himmel" to 0,
                 "Ein paar Wolken" to 1,
                 "Wolkig" to 2,
-                "Überwiegend bewölkt" to 3,
-                "Leichtes Nieseln" to 4,
+                "Leichtes Nieseln" to 3,
+                "Wetter deaktivieren" to 4,
                 "Mäßiger Regen" to 5,
                 "Gewitter" to 6,
                 "Schneefall" to 7,
                 "Nebel" to 8
+        )
+
+        val SONGS = hashMapOf(
+                0 to R.raw.sonne_grillen,
+                1 to R.raw.sonne_birds,
+                2 to R.raw.windy,
+                3 to R.raw.little_rain,
+                5 to R.raw.rain,
+                6 to R.raw.gewitter
+
         )
 
     }
@@ -72,9 +86,14 @@ class PresetsFragment : Fragment(), CustomListener {
     fun changeBtButtonsState(value:Boolean){
         var handler = Handler(Looper.getMainLooper())
         handler.post {
-            activate_presets_btn?.isEnabled = value
-            var colorId = if(value) resources.getColor(R.color.btConnected) else resources.getColor(R.color.btNotConnected)
-            bluetoothStateBtn.backgroundTintList = ColorStateList.valueOf(colorId)
+            if(lastClickedPreset != null){
+                activate_presets_btn2?.isEnabled = value
+            }
+            if(value){
+                btInfo2.clearColorFilter()
+            }else{
+                btInfo2.setColorFilter(overlay)
+            }
         }
     }
 
@@ -83,21 +102,43 @@ class PresetsFragment : Fragment(), CustomListener {
         prefs = MainActivity.prefs!!
         prefs.addListener(this)
         bluetoothService = MainActivity.bluetoothLeService
+        btInfo2.setColorFilter(overlay)
         initGridItems()
-        activate_presets_btn.setOnClickListener { myView ->
+
+        /**
+         * todo: darf auch nur aktiv sein wenn bt vorhanden ist
+         */
+        activate_presets_btn2.setOnClickListener { myView ->
             if(lastClickedPreset != null){
+
+
+
+
+
                 bluetoothService.write(lastClickedPreset.toString())
+            }
+        }
+
+        btInfo2.setOnClickListener{ myView ->
+            if(prefs!!.BT_ENABLED){
+                Toast.makeText(context,"Bereits mit Sydney verbunden", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context,"Versuche mit Sydney zu verbinden", Toast.LENGTH_SHORT).show()
+                bluetoothService.connect(MainActivity.HM10_ADDRESS)
             }
         }
     }
 
     fun initGridItems(){
         for(i in 0 until (gridLayout.childCount)){
-            var imageButton: ImageButton = gridLayout.getChildAt(i) as ImageButton
-            imageButton.setOnClickListener { myView ->
+            var presetSvg: ImageView = gridLayout.getChildAt(i) as ImageView
+            presetSvg.setColorFilter(overlay)
+            presetSvg.setOnClickListener { myView ->
+                presetSvg.clearColorFilter()
                 setBgAndResetOthers()
-                imageButton.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorBtnPressed))
-                activate_presets_btn.isEnabled = true
+                if(prefs!!.BT_ENABLED){
+                    activate_presets_btn2.isEnabled = true
+                }
                 lastClickedPreset = i
                 if(lastClickedPreset != null){
                     presetsDescription.visibility = View.VISIBLE
@@ -110,8 +151,8 @@ class PresetsFragment : Fragment(), CustomListener {
 
     fun setBgAndResetOthers(){
         if(lastClickedPreset != null){
-            var imageButton: ImageButton = gridLayout.getChildAt(lastClickedPreset!!) as ImageButton
-            imageButton.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.colorBtnNotPressed))
+            var presetsSvg : ImageView = gridLayout.getChildAt(lastClickedPreset!!) as ImageView
+            presetsSvg.setColorFilter(overlay)
         }
     }
 }

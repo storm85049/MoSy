@@ -45,8 +45,8 @@ class Weather(
         val temperature: Double,
         val iconID: String) {
 
-    var sunriseUnix:Int? = null
-    var sunsetUnix:Int? = null
+    var sunriseUnix:Long? = null
+    var sunsetUnix:Long? = null
     var pressure:Int? = null
     var windspeed:Double? = null
     var windDegree:Int? = null
@@ -97,8 +97,10 @@ class Weather(
           if(moreInfo){
               var weather = Weather(city,cityId,description,humidity,temperature,iconId)
 
-              weather.sunriseUnix = weatherSysObject?.get("sunrise") as Int?
-              weather.sunsetUnix =  weatherSysObject?.get("sunset") as Int?
+              val _sunriseUnix = weatherSysObject?.get("sunrise") as Int?
+              val _sunsetUnix =  weatherSysObject?.get("sunset") as Int?
+              weather.sunriseUnix = _sunriseUnix?.toLong()
+              weather.sunsetUnix =  _sunsetUnix?.toLong()
 
               try{
                   var doubledValue = windObject?.get("deg") as Int?

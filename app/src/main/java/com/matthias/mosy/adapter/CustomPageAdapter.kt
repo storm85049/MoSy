@@ -22,8 +22,8 @@ class CustomPageAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter
 
         }
     }
-
     override fun getCount(): Int {
         return 2
     }
+
 }
