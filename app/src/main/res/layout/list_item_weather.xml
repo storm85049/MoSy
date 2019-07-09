@@ -18,7 +18,7 @@
     tools:src="@mipmap/ic_launcher" />
 
   <TextView
-    android:id="@+id/recipe_list_detail"
+    android:id="@+id/activeLabel"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentEnd="true"
@@ -29,7 +29,7 @@
     android:paddingEnd="4dp"
     android:textColor="#000000"
     android:textSize="12sp"
-    tools:text="Detail" />
+    tools:text="Aktiv" />
 
   <RelativeLayout
     android:id="@+id/recipe_list_text_layout"
@@ -37,7 +37,7 @@
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
     android:layout_toEndOf="@id/weather_list_icon"
-    android:layout_toStartOf="@id/recipe_list_detail">
+    android:layout_toStartOf="@id/activeLabel">
 
     <TextView
       android:id="@+id/weather_list_city"

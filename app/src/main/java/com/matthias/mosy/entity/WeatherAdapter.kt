@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.matthias.mosy.MainActivity
 import com.matthias.mosy.R
 
 
@@ -43,6 +44,7 @@ class WeatherAdapter(private val context: Context,
       holder.humidityTextView = view.findViewById(R.id.weather_list_humidity) as TextView
       holder.temperatureTextView = view.findViewById(R.id.weather_list_temperature) as TextView
       holder.weatherIcon = view.findViewById(R.id.weather_list_icon) as ImageView
+      holder.activeLabel = view.findViewById(R.id.activeLabel) as TextView
       view.tag = holder
     } else {
       view = convertView
@@ -54,8 +56,13 @@ class WeatherAdapter(private val context: Context,
     val temperatureTextView = holder.temperatureTextView
     val humidityTextView = holder.humidityTextView
     val weatherIcon = holder.weatherIcon
-
     val weather = getItem(position) as Weather
+    var label = holder.activeLabel
+    label.text = ""
+
+    if(MainActivity.prefs?.activeCityID == weather.cityId ){
+      label.text = "Aktiv"
+    }
 
     cityTextView.text = weather.city
     descriptionTextView.text = weather.description
@@ -63,6 +70,7 @@ class WeatherAdapter(private val context: Context,
     humidityTextView.text = weather.humidity.toString() + "%"
     var iconPath = "ic_${weather.iconID}"
     var idPath = context.resources.getIdentifier(iconPath,"drawable", context.packageName)
+
     weatherIcon.setImageResource(idPath)
 
     return view
@@ -74,5 +82,6 @@ class WeatherAdapter(private val context: Context,
     lateinit var temperatureTextView: TextView
     lateinit var humidityTextView: TextView
     lateinit var weatherIcon: ImageView
+    lateinit var activeLabel: TextView
   }
 }

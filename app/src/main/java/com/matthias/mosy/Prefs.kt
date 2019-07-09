@@ -11,6 +11,8 @@ class Prefs(context: Context){
     val SAVED_CITIES = "saved_cities"
     val prefs : SharedPreferences = context.getSharedPreferences(PREFERENCES,0)
     var BT_ENABLED: Boolean = false
+    var activeCityID: Int? = null
+    
 
     private var listeners = arrayListOf<CustomListener>()
 

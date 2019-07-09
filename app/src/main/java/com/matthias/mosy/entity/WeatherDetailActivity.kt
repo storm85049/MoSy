@@ -117,6 +117,8 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
       if(stateNumber != null){
         MainActivity.mediaPlayer.handleMusic(stateNumber!!)
         bluetoothService.write(stateNumber.toString() + "|" + temperatureString)
+        MainActivity.prefs?.activeCityID = intent.extras.getInt(EXTRA_ID)
+
       }
       else{
         Toast.makeText(this,"${description.text} nicht implementiert ",Toast.LENGTH_LONG).show()
