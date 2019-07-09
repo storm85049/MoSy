@@ -24,7 +24,6 @@ import java.lang.StringBuilder
 import java.net.UnknownHostException
 
 
-const val MESSAGE_ADD_CITY :Int = 0
 
 class SearchWeatherDialog(context: Context, private var customObserver: CustomObserver) : Dialog(context){
 
@@ -53,7 +52,7 @@ class SearchWeatherDialog(context: Context, private var customObserver: CustomOb
                 this.progressIndicator.visibility = View.VISIBLE
                 val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(v?.windowToken,0)
-                this.getWeatherDataFor(place.toString(), view)
+                this.getWeatherDataFor(place.toString())
             }
             true
         }
@@ -68,14 +67,14 @@ class SearchWeatherDialog(context: Context, private var customObserver: CustomOb
         alertDialog = builder.create()
         alertDialog.show()
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener { view ->
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
             val place = searchText.text
             this.progressIndicator.visibility = View.VISIBLE
-            this.getWeatherDataFor(place.toString(), view)
+            this.getWeatherDataFor(place.toString())
         }
     }
 
-    private fun getWeatherDataFor(city:String, view: View)
+    private fun getWeatherDataFor(city:String)
     {
 
      var call: Call? = WeatherDataClient.getData(context,city)
@@ -89,7 +88,6 @@ class SearchWeatherDialog(context: Context, private var customObserver: CustomOb
                     }
                 }
             }
-
             override fun onResponse(call: Call, response: Response) {
                 var handler = Handler(Looper.getMainLooper())
                 handler.post {

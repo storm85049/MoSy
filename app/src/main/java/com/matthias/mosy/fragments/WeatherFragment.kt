@@ -19,7 +19,6 @@ import com.matthias.mosy.MainActivity
 import com.matthias.mosy.R
 import com.matthias.mosy.adapter.CustomObserver
 import com.matthias.mosy.adapter.ScrollAdapter
-import com.matthias.mosy.dialog.MESSAGE_ADD_CITY
 import com.matthias.mosy.dialog.SearchWeatherDialog
 import com.matthias.mosy.entity.Weather
 import com.matthias.mosy.entity.WeatherAdapter
@@ -38,16 +37,9 @@ import java.lang.StringBuilder
 import java.net.UnknownHostException
 import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- *
- */
-class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
+
+class WeatherFragment() : android.support.v4.app.Fragment(), CustomObserver {
 
     /***updateList*/
     override fun applyChanges() {
@@ -107,41 +99,7 @@ class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
                 }
             }
             override fun onResponse(call: Call, response: Response) {
-                var handler = Handler(Looper.getMainLooper())
-                handler.post{
-                    val parser = Parser()
-                    val stringBuilder = StringBuilder(response.body()?.string())
-                    var jsonObject: JsonObject = JsonObject()
-                    var jsonParseable = false
-                    try{
-                        jsonObject = parser.parse(stringBuilder) as JsonObject
-                        jsonParseable = true
-                    }catch (e: KlaxonException){
-                        Toast.makeText(context, "Es besteht ein Problem mit der Wetterdatenschnittstelle", Toast.LENGTH_LONG).show()
-                    }
-                    if(response.code() != 200 && jsonParseable){
-                        var message = jsonObject.get("message") as String
-                        Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
-                    }else if (jsonParseable){
-                        var convertedList:ArrayList<Weather>? = null
-                        try{
-                           convertedList = Weather.createWeatherListItem(jsonObject)
-                        }catch(e:Exception){
-                            Toast.makeText(context, "Es ist ein Fehler beim Abrufen der Daten aufgetreten", Toast.LENGTH_LONG).show()
-                        }
-                        if(convertedList != null) {
-                            val adapter = WeatherAdapter(context, convertedList)
-                            listView.adapter = adapter
-                            swipeLayout.isRefreshing = false
-                            listView.setOnScrollListener(ScrollAdapter(swipeRefreshLayout,listView))
-                            listView.setOnItemClickListener { _, _, position, _ ->
-                                val selectedWeather = convertedList[position]
-                                openWeather(selectedWeather)
-
-                            }
-                        }
-                    }
-                }
+                handleResponse(response)
             }
         })
     }
@@ -150,5 +108,46 @@ class WeaterFragment() : android.support.v4.app.Fragment(), CustomObserver {
         val intent = WeatherDetailActivity.newIntent(context,weather)
         startActivity(intent)
     }
+
+    fun handleResponse(response: Response){
+        var handler = Handler(Looper.getMainLooper())
+        handler.post{
+            val parser = Parser()
+            val stringBuilder = StringBuilder(response.body()?.string())
+            var jsonObject: JsonObject = JsonObject()
+            var jsonParseable = false
+            try{
+                jsonObject = parser.parse(stringBuilder) as JsonObject
+                jsonParseable = true
+            }catch (e: KlaxonException){
+                Toast.makeText(context, "Es besteht ein Problem mit der Wetterdatenschnittstelle", Toast.LENGTH_LONG).show()
+            }
+            if(response.code() != 200 && jsonParseable){
+                var message = jsonObject.get("message") as String
+                Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
+            }
+            else if (jsonParseable){
+                var convertedList:ArrayList<Weather>? = null
+                try{
+                    convertedList = Weather.createWeatherListItem(jsonObject)
+                }catch(e:Exception){
+                    Toast.makeText(context, "Es ist ein Fehler beim Abrufen der Daten aufgetreten", Toast.LENGTH_LONG).show()
+                }
+                if(convertedList != null) {
+                    val adapter = WeatherAdapter(context, convertedList)
+                    listView.adapter = adapter
+                    swipeLayout.isRefreshing = false
+                    listView.setOnScrollListener(ScrollAdapter(swipeRefreshLayout,listView))
+                    listView.setOnItemClickListener { _, _, position, _ ->
+                        val selectedWeather = convertedList[position]
+                        openWeather(selectedWeather)
+
+                    }
+                }
+            }
+        }
+
+    }
+
 }
 

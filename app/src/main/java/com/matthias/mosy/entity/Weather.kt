@@ -33,7 +33,6 @@ package com.matthias.mosy.entity
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import java.lang.ClassCastException
-import kotlin.math.roundToInt
 
 
 class Weather(
@@ -106,12 +105,11 @@ class Weather(
                   var doubledValue = windObject?.get("deg") as Int?
                   weather.windDegree= doubledValue
               }catch(e:ClassCastException){
-                  var doubleValue=  windObject?.get("speed") as Double?
+                  var doubleValue=  windObject?.get("deg") as Double?
                   weather.windDegree= doubleValue?.toInt()
               }
 
               //todo manchmal kommt das hier auch als "falscher Datentyp an, das muss unbedingt behoben werden"
-
 
               try{
                   var doubledValue = weatherData?.get("pressure") as Int?

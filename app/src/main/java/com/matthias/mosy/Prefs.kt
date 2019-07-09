@@ -47,9 +47,6 @@ class Prefs(context: Context){
         prefs.edit().putString(SAVED_CITIES,stringToCommit).apply()
     }
 
-    fun deleteCities(){
-        setSavedCities(ArrayList<Int>())
-    }
 
     fun addCity(id:Int)
     {

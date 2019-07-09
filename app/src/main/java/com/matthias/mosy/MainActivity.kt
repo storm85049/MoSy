@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import com.matthias.mosy.adapter.CustomPageAdapter
 import com.matthias.mosy.bluetooth.BluetoothLeService
+import com.matthias.mosy.entity.MediaplayerWrapper
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 companion object {
     var prefs : Prefs?  = null
     lateinit var bluetoothLeService: BluetoothLeService
+    lateinit var mediaPlayer: MediaplayerWrapper
     val HM10_ADDRESS = "34:03:DE:37:C1:C5"
 
 }
@@ -32,7 +34,7 @@ companion object {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     prefs = Prefs(applicationContext)
-
+    mediaPlayer = MediaplayerWrapper(applicationContext)
 
     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_PERMISSION_ACCESS_FINE_LOCATION)
     setupBluetoothConnection()
@@ -56,7 +58,6 @@ companion object {
     if(bluetoothLeService.initialize()){
       bluetoothLeService.connect(HM10_ADDRESS)
     }
-    //todo : echten callback einbauen
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

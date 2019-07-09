@@ -42,7 +42,7 @@ class PresetsFragment : Fragment(), CustomListener {
                 0 to "Klarer Himmel",
                 1 to "Ein paar Wolken",
                 2 to "Wolkig",
-                3 to "Leichtes Nieseln",
+                3 to "Leichter Regen",
                 4 to "Wetter deaktivieren",
                 5 to "Mäßiger Regen",
                 6 to "Gewitter",
@@ -54,12 +54,18 @@ class PresetsFragment : Fragment(), CustomListener {
                 "Klarer Himmel" to 0,
                 "Ein paar Wolken" to 1,
                 "Wolkig" to 2,
-                "Leichtes Nieseln" to 3,
+                "Überwiegend bewölkt" to 2,
+                "Bedeckt" to 2,
+                "Regenschauer" to 5,
+                "Trüb" to 8,
+                "Leichter Regen" to 3,
                 "Wetter deaktivieren" to 4,
+                "Leichter Nieselregen" to 3,
                 "Mäßiger Regen" to 5,
                 "Gewitter" to 6,
                 "Schneefall" to 7,
-                "Nebel" to 8
+                "Nebel" to 8,
+                "Dunst" to 8
         )
 
         val SONGS = hashMapOf(
@@ -69,7 +75,6 @@ class PresetsFragment : Fragment(), CustomListener {
                 3 to R.raw.little_rain,
                 5 to R.raw.rain,
                 6 to R.raw.gewitter
-
         )
 
     }
@@ -105,16 +110,10 @@ class PresetsFragment : Fragment(), CustomListener {
         btInfo2.setColorFilter(overlay)
         initGridItems()
 
-        /**
-         * todo: darf auch nur aktiv sein wenn bt vorhanden ist
-         */
+
         activate_presets_btn2.setOnClickListener { myView ->
             if(lastClickedPreset != null){
-
-
-
-
-
+                MainActivity.mediaPlayer.handleMusic(lastClickedPreset!!)
                 bluetoothService.write(lastClickedPreset.toString())
             }
         }
@@ -127,6 +126,10 @@ class PresetsFragment : Fragment(), CustomListener {
                 bluetoothService.connect(MainActivity.HM10_ADDRESS)
             }
         }
+    }
+
+    fun handleMusic(state:Int){
+
     }
 
     fun initGridItems(){

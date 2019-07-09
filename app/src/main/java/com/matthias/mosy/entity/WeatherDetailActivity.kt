@@ -2,49 +2,29 @@ package com.matthias.mosy.entity
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.icu.text.LocaleDisplayNames
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.telecom.Call
-import android.webkit.WebView
 import android.widget.*
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.matthias.mosy.MainActivity
 import com.matthias.mosy.Prefs
 import com.matthias.mosy.R
 import com.matthias.mosy.adapter.CustomListener
-import com.matthias.mosy.adapter.CustomObserver
-import com.matthias.mosy.adapter.ScrollAdapter
 import com.matthias.mosy.bluetooth.BluetoothLeService
 import com.matthias.mosy.fragments.PresetsFragment
-import com.matthias.mosy.fragments.WeaterFragment
 import com.matthias.mosy.httpclient.WeatherDataClient
 import kotlinx.android.synthetic.main.activity_weather_detail.*
-import kotlinx.android.synthetic.main.fragment_weather.*
 import okhttp3.Callback
 import okhttp3.Response
-import org.w3c.dom.Text
 import java.io.IOException
 import java.lang.StringBuilder
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.*
 
 
@@ -79,7 +59,6 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
 
   private var stateNumber : Int? = null
   private var prefs : Prefs? = null
-  private var mediaPlayer: MediaPlayer? = null
   private var temperatureString:String = "0"
 
   private lateinit var bluetoothService: BluetoothLeService
@@ -99,12 +78,13 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
   }
 
   fun loadViewVars() {
+
     description = findViewById(R.id.weather_description)
     cityName = findViewById(R.id.city_text)
     pressure = findViewById(R.id.pressure_text)
     humidity = findViewById(R.id.humidity_text)
     temperature = findViewById(R.id.temperature_text)
-    activateButton = findViewById(R.id.activate_presets_btn)
+    activateButton = findViewById(R.id.activateWeatherBtn)
     weatherIcon = findViewById(R.id.weather_icon )
     btInfo = findViewById(R.id.btInfo)
     sunrise = findViewById(R.id.sunrise_text)
@@ -123,9 +103,6 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
     prefs = MainActivity.prefs
     prefs!!.addListener(this)
 
-    mediaPlayer = MediaPlayer()
-
-
 
     btInfo.setOnClickListener{ myView ->
       if(prefs!!.BT_ENABLED){
@@ -136,19 +113,13 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
       }
     }
 
-    activate_presets_btn.setOnClickListener { myView ->
+    activateWeatherBtn.setOnClickListener { myView ->
       if(stateNumber != null){
-        //mediaPlayer?.start()
-        //
-        val source: Int? = PresetsFragment.SONGS.get(stateNumber!!)
-        if(source != null){
-          //todo: das hier noch einmal anpassen
-          var path = "android.resource://com.matthias.mosy/${source}"
-          mediaPlayer?.setDataSource(path)
-          mediaPlayer?.start()
-        }
-
+        MainActivity.mediaPlayer.handleMusic(stateNumber!!)
         bluetoothService.write(stateNumber.toString() + "|" + temperatureString)
+      }
+      else{
+        Toast.makeText(this,"${description.text} nicht implementiert ",Toast.LENGTH_LONG).show()
       }
     }
 
