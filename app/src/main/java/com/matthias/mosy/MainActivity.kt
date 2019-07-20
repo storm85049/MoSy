@@ -17,7 +17,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-companion object {
+  /**
+   * Kleiner "Hack"-> die folgenden Objekte sind so in der gesamten Applikation als Singletons verfügbar.
+   * Macht man das in der App Entwicklung mit Kotlin so? Es funktioniert aber super
+   */
+  companion object {
     var prefs : Prefs?  = null
     lateinit var bluetoothLeService: BluetoothLeService
     lateinit var mediaPlayer: MediaplayerWrapper
@@ -30,6 +34,9 @@ companion object {
   private val REQUEST_ENABLE_BT = 1
   private lateinit var bluetoothManager: BluetoothManager
 
+  /**
+   * request persmissions, initialize important classes...
+   */
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)

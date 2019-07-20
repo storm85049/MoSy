@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.matthias.mosy.adapter.CustomListener
 
+/**
+ * Eine Klasse, die die Preferences des Benutzer hält, also gespeicherte Orte etc.
+ */
 class Prefs(context: Context){
 
 

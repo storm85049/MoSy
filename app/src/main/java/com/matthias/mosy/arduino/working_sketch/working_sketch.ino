@@ -1,3 +1,7 @@
+/*
+    war nur als testSketch gedacht, nachdem das BLuetoothModul das erste mal funktioniert hat.
+*/
+
 #include <SoftwareSerial.h>
 #define BTSerial Serial1
 #define BAUD 115200

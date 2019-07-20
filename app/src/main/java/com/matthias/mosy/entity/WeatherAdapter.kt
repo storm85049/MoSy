@@ -10,6 +10,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.matthias.mosy.R
 
+/**
+ * der Weatheradpater erbt vom BaseAdapter, sodass er ganz einfach mit eseiner eigenen
+ * View und Logik in die anzuzeigende Liste mit eingebunden werden kann
+ */
 
 class WeatherAdapter(private val context: Context,
                      private val dataSource: ArrayList<Weather>) : BaseAdapter() {

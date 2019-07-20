@@ -25,7 +25,9 @@ import com.matthias.mosy.adapter.CustomListener
 import com.matthias.mosy.bluetooth.BluetoothLeService
 import kotlinx.android.synthetic.main.fragment_presets.*
 
-
+/**
+ * dieses Fragment stellt die Presets dar und hält gleichzeitig das mapping von Wetterlagen zu Zahlen
+ */
 class PresetsFragment : Fragment(), CustomListener {
 
     private lateinit var gridLayout: GridLayout

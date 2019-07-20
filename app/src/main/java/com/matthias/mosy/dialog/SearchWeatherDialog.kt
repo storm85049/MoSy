@@ -24,7 +24,10 @@ import java.lang.StringBuilder
 import java.net.UnknownHostException
 
 
-
+/**
+ * Der Dialog, der sich öffnet, wenn man nach einem neuen Ort sucht. Macht im Prinzip nichts anderes als WeatherFragment,
+ * außer, dass man noch eine Tastautr für die Eingabe bekommt.
+ */
 class SearchWeatherDialog(context: Context, private var customObserver: CustomObserver) : Dialog(context){
 
 

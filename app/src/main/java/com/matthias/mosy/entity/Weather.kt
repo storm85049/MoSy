@@ -34,6 +34,9 @@ import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import java.lang.ClassCastException
 
+/**
+ * das ist ein fast klassisches entityobject mit eigenem hydrator/extractor
+ */
 
 class Weather(
 

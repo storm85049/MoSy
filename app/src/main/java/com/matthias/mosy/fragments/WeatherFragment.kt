@@ -38,10 +38,13 @@ import java.net.UnknownHostException
 import java.util.*
 
 
-
+/**
+ * dieses fragment kümmert sich um das Erstellen der Liste aus den gespeicherten IDs in den SharedPreferences und das
+ * Handlen beim Click auf einen Ort oder beim Click auf das Plus-Symbol
+ */
 class WeatherFragment() : android.support.v4.app.Fragment(), CustomObserver {
 
-    /***updateList*/
+    /***updateList wenn über das plus symbol im alert eine neue stadt hinzugefügt wurde*/
     override fun applyChanges() {
         initList()
     }
@@ -109,6 +112,10 @@ class WeatherFragment() : android.support.v4.app.Fragment(), CustomObserver {
         startActivity(intent)
     }
 
+    /**
+     * wenn eine antwort von der api wiederkommt, wird das JSON geparst, in WeatherObjekte umgewandelt
+     * und als Liste an den Weatheradapter übergeben, der dann eine ListView erstellt.
+     */
     fun handleResponse(response: Response){
         var handler = Handler(Looper.getMainLooper())
         handler.post{

@@ -123,6 +123,7 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
       }
     }
 
+    //löschen eines ortes, wobei ein ganz einfaches alert aufploppt.
     deleteCityBtn.setOnClickListener{myView ->
         val dialog = AlertDialog.Builder(this).setTitle("${cityName.text} löschen ? ").setMessage("Soll ${cityName.text} aus den gespeicherten Städten gelöscht werden?")
                 .setPositiveButton("Bestätigen") { dialog, i ->
@@ -135,12 +136,14 @@ class WeatherDetailActivity : AppCompatActivity(),CustomListener{
   }
 
 
+  //es wird bei jedem laden dieser Activity ein neuer call gegen die API gemacht, um immer die neuesten Wetterdaaten zu bekommen.
   fun loadView(){
 
     val cityId= intent.extras.getInt(EXTRA_ID)
     var list = ArrayList<Int>()
     list.add(cityId)
 
+    //da wir nicht nach dem namen des ortes suchen wollen, sondern nach seiner ID, müssen wir diese in unseren Client als ArrayList übergeben.
     var call = WeatherDataClient.getData(this,listOfIds = list)
 
     call?.enqueue(object: Callback{
